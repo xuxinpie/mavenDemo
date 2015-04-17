@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	#* veloctiy中宏的用法
+	#macro(orderPic $type) 
+   		#if ($orderField.equals($type)) 
+        	<img src="http://images.cnblogs.com/ico/${orderType}.gif"> 
+    	#end 
+	#end
+	*#
+	
+	##set用户设置变量
+	#set($title="Welcome")
+	${title}
+	
+	
+</body>
+</html>

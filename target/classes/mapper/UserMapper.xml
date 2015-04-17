@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xinux.mavenDemo.dao.UserDao">
+	<resultMap id="BaseResultMap" type="com.xinux.mavenDemo.model.User">
+		<id column="id" property="id" />
+		<result column="email" property="email" />
+		<result column="user_name" property="userName" />
+		<result column="password" property="password" />
+		<result column="age" property="age" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, email, user_name, password, age
+	</sql>
+	<select id="findUserById" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where id = #{id}
+	</select>
+
+	<!-- 对于非简单数据类型，需要附上对应的类型 -->
+	<!-- <select id="findUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer"> 
+		select <include refid="Base_Column_List" /> from user where id = #{id,jdbcType=INTEGER} 
+		</select> -->
+	<!-- 当在if元素中test传递的参数时,就必须要用_parameter来引用这个参数,使用id会报错 -->
+	<!-- <select id="findUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer"> 
+		select <include refid="Base_Column_List" /> from user <if test="_parameter 
+		!= 0"> where id = #{id,jdbcType=INTEGER} </select> -->
+	<select id="findUserByEmail" resultMap="BaseResultMap"
+		parameterType="String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where email = #{email}
+	</select>
+	<!-- 对于简单数据类型,sql映射语句中直接#{变量名}这种方式引用就行了 -->
+	<delete id="deleteUserById" parameterType="long">
+		delete from user
+		where
+		id = #{id}
+	</delete>
+	<!-- 对于数据库表的主键不是自增的类型 -->
+	<!-- <insert id="insertUser" parameterType="User"> <![CDATA[ insert into 
+		user (user_name, password, age) values (#{userName}, #{password}, #{age}) 
+		]]> <selectKey resultType="int" keyProperty="id"> SELECT @@IDENTITY AS id 
+		</selectKey> </insert> -->
+	<insert id="insertUser" parameterType="User" useGeneratedKeys="true"
+		keyProperty="id">
+		insert into user (user_name, email, password,
+		age)
+		values
+		(#{userName}, #{email}, #{password}, #{age})
+	</insert>
+	<update id="updateUserInfo" parameterType="User">
+		update user
+		<set>
+			<if test="email != null">
+				email = #{email},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			<if test="age != null">
+				age = #{age},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	<select id="findAllUsers" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user
+	</select>
+	<select id="selectUserInList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+</mapper>

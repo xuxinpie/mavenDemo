@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>List Users</title>
+    </head>
+
+    <body>
+        <h2>USER LIST</h2>
+        <table width="600" border="1" cellspacing="1" cellpadding="1">
+            <tr bgcolor="#999999">
+                <td>UserName</td>
+                <td>Email</td>
+                <td>Age</td>
+            </tr>
+        #foreach($user in $users)
+            <tr>
+                <td>
+                    <a href="showUser?id=${user.id}">${user.userName}</a>
+                </td>
+                <td>${user.email}</td>
+                <td>${user.age}</td>
+            </tr>
+        #end
+        </table>
+    </body>
+</html>
